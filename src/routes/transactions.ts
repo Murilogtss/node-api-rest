@@ -4,6 +4,16 @@ import { string, z } from 'zod'
 import { randomUUID } from 'node:crypto'
 
 export async function transactionsRoutes(app: FastifyInstance) {
+  app.get('/summary', async () => {
+    const summary = await knex('transactions')
+      .sum('amount', {
+        as: 'amount',
+      })
+      .first()
+
+    return { summary }
+  })
+
   app.get('/', async () => {
     const transactions = await knex('transactions').select('*')
 
